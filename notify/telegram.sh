@@ -10,6 +10,10 @@
 # =============================================================================
 set -euo pipefail
 
+# Visit BotFather to get your token:
+TELEGRAM_BOT_TOKEN="YOUR_BOT_TOKEN"
+TELEGRAM_CHAT_ID="YOUR_CHAT_ID"
+
 TELEGRAM_HEADER_TEMPLATE="${NOTIFY_TELEGRAM_HEADER_TEMPLATE:-[%s] Action: %s}"
 TELEGRAM_USER_TEMPLATE="${NOTIFY_TELEGRAM_USER_TEMPLATE:- | User: %s}"
 
