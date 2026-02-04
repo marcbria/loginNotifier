@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Script:    notifyTelegram.sh
+# Script:    telegram.sh
 # Author:    Marc Bria (UAB)
 # License:   AGPL-3.0
 # Purpose:   Send a login/logout notification to Telegram via the Bot API.
 # Parameters:
 #   $1 - Action (e.g., Login, Logout).
 #   $2 - Username (optional).
+#   $3 - Log line (optional).
 # =============================================================================
 set -euo pipefail
 
 ACTION="${1:-}"
 USERNAME="${2:-}"
+LOG_LINE="${3:-}"
 
 if [[ -z "$ACTION" ]]; then
   echo "Usage: $0 <Action> [Username]" >&2
@@ -26,6 +28,9 @@ fi
 MESSAGE="[$(hostname)] Action: $ACTION"
 if [[ -n "$USERNAME" ]]; then
   MESSAGE+=" | User: $USERNAME"
+fi
+if [[ -n "$LOG_LINE" ]]; then
+  MESSAGE+=" | Line: $LOG_LINE"
 fi
 
 # Send the message to Telegram.

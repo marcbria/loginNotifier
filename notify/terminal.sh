@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Script:    notifyTerminal.sh
+# Script:    terminal.sh
 # Author:    Marc Bria (UAB)
 # License:   AGPL-3.0
 # Purpose:   Send a login/logout notification to the root user's terminal.
 # Parameters:
 #   $1 - Action (e.g., Login, Logout).
 #   $2 - Username (optional).
+#   $3 - Log line (optional).
 # Environment:
 #   ROOT_TTY_OVERRIDE - Optional tty device path (e.g., /dev/pts/1) for testing.
 # =============================================================================
@@ -14,6 +15,7 @@ set -euo pipefail
 
 ACTION="${1:-}"
 USERNAME="${2:-}"
+LOG_LINE="${3:-}"
 
 if [[ -z "$ACTION" ]]; then
   echo "Usage: $0 <Action> [Username]" >&2
@@ -23,6 +25,9 @@ fi
 MESSAGE="[$(hostname)] Action: $ACTION"
 if [[ -n "$USERNAME" ]]; then
   MESSAGE+=" | User: $USERNAME"
+fi
+if [[ -n "$LOG_LINE" ]]; then
+  MESSAGE+=" | Line: $LOG_LINE"
 fi
 
 ROOT_TTY="${ROOT_TTY_OVERRIDE:-}"

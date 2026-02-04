@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Script:    notifyMail.sh
+# Script:    mail.sh
 # Author:    Marc Bria (UAB)
 # License:   AGPL-3.0
 # Purpose:   Send a login/logout notification via email using the local mail command.
 # Parameters:
 #   $1 - Action (e.g., Login, Logout).
 #   $2 - Username (optional).
+#   $3 - Log line (optional).
 # Environment:
 #   NOTIFY_MAIL_TO - Destination email address.
 #   NOTIFY_MAIL_SUBJECT - Optional subject prefix (default: "Login notifier").
@@ -15,6 +16,7 @@ set -euo pipefail
 
 ACTION="${1:-}"
 USERNAME="${2:-}"
+LOG_LINE="${3:-}"
 
 if [[ -z "$ACTION" ]]; then
   echo "Usage: $0 <Action> [Username]" >&2
@@ -35,6 +37,10 @@ MESSAGE+="Action: ${ACTION}"
 if [[ -n "$USERNAME" ]]; then
   MESSAGE+=$'\n'
   MESSAGE+="User: ${USERNAME}"
+fi
+if [[ -n "$LOG_LINE" ]]; then
+  MESSAGE+=$'\n'
+  MESSAGE+="Log line: ${LOG_LINE}"
 fi
 
 # Send the message using the local mail command.
