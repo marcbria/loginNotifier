@@ -7,7 +7,10 @@
 # Parameters:
 #   $1 - Action (e.g., Login, Logout).
 #   $2 - Username (optional).
+<<<<<<< codex/fix-log-file-not-readable-error
 #   $3 - Log line (optional).
+=======
+>>>>>>> main
 # Environment:
 #   ROOT_TTY_OVERRIDE - Optional tty device path (e.g., /dev/pts/1) for testing.
 # =============================================================================
@@ -15,7 +18,10 @@ set -euo pipefail
 
 ACTION="${1:-}"
 USERNAME="${2:-}"
+<<<<<<< codex/fix-log-file-not-readable-error
 LOG_LINE="${3:-}"
+=======
+>>>>>>> main
 
 if [[ -z "$ACTION" ]]; then
   echo "Usage: $0 <Action> [Username]" >&2
@@ -26,9 +32,12 @@ MESSAGE="[$(hostname)] Action: $ACTION"
 if [[ -n "$USERNAME" ]]; then
   MESSAGE+=" | User: $USERNAME"
 fi
+<<<<<<< codex/fix-log-file-not-readable-error
 if [[ -n "$LOG_LINE" ]]; then
   MESSAGE+=" | Line: $LOG_LINE"
 fi
+=======
+>>>>>>> main
 
 ROOT_TTY="${ROOT_TTY_OVERRIDE:-}"
 if [[ -z "$ROOT_TTY" ]]; then
