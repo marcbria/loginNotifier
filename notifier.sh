@@ -7,7 +7,11 @@
 # Parameters:
 #   $1 - Action to match (e.g., opened, closed).
 #   $2 - Notifier type (e.g., terminal, telegram, mail).
+<<<<<<< codex/fix-log-file-not-readable-error
+#   $3 - Cooldown interval in seconds between notifications (optional, default: 10).
+=======
 #   $3 - Poll interval in seconds (optional, default: 10).
+>>>>>>> main
 # =============================================================================
 set -euo pipefail
 
@@ -16,7 +20,10 @@ ACTION_MATCH="${1:-}"
 NOTIFY_TYPE="${2:-}"
 POLL_INTERVAL="${3:-10}"
 NOTIFY_TYPE_LOWER=""
+<<<<<<< codex/fix-log-file-not-readable-error
+=======
 LAST_SINCE="today"
+>>>>>>> main
 
 # List of usernames to exclude from notifications.
 EXCLUDED_USERS=("root" "debian")
@@ -68,7 +75,11 @@ process_login_line() {
   if is_excluded_user "$user"; then
     return 0
   fi
+<<<<<<< codex/fix-log-file-not-readable-error
+  "$NOTIFY_SCRIPT" "$ACTION_MATCH" "$user" "$line"
+=======
   "$NOTIFY_SCRIPT" "$ACTION_MATCH" "$user"
+>>>>>>> main
 }
 
 if command -v journalctl >/dev/null 2>&1; then
@@ -82,6 +93,16 @@ else
   exit 1
 fi
 
+<<<<<<< codex/fix-log-file-not-readable-error
+echo "Watching systemd journal for session events (${ACTION_MATCH}) from now on..."
+
+# Follow the journal from now on and detect session events.
+journalctl -n 0 -f -o cat | while IFS= read -r line; do
+  if [[ "$line" == *"session"* && "$line" == *"$ACTION_MATCH"* ]]; then
+    process_login_line "$line"
+    sleep "$POLL_INTERVAL"
+  fi
+=======
 echo "Watching systemd journal for session events (${ACTION_MATCH}) every ${POLL_INTERVAL}s..."
 
 # Poll the auth log and detect session events.
@@ -91,4 +112,5 @@ while true; do
   done
   LAST_SINCE="$(date --iso-8601=seconds)"
   sleep "$POLL_INTERVAL"
+>>>>>>> main
 done
