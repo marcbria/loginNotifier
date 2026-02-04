@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Script:    notifyTelegram.sh
+# Script:    telegram.sh
 # Author:    Marc Bria (UAB)
 # License:   AGPL-3.0
 # Purpose:   Send a login/logout notification to Telegram via the Bot API.

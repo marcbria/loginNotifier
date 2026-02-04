@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Script:    notifyTerminal.sh
+# Script:    terminal.sh
 # Author:    Marc Bria (UAB)
 # License:   AGPL-3.0
 # Purpose:   Send a login/logout notification to the root user's terminal.
