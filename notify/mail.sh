@@ -7,10 +7,7 @@
 # Parameters:
 #   $1 - Action (e.g., Login, Logout).
 #   $2 - Username (optional).
-<<<<<<< codex/fix-log-file-not-readable-error
 #   $3 - Log line (optional).
-=======
->>>>>>> main
 # Environment:
 #   NOTIFY_MAIL_TO - Destination email address.
 #   NOTIFY_MAIL_SUBJECT - Optional subject prefix (default: "Login notifier").
@@ -19,10 +16,7 @@ set -euo pipefail
 
 ACTION="${1:-}"
 USERNAME="${2:-}"
-<<<<<<< codex/fix-log-file-not-readable-error
 LOG_LINE="${3:-}"
-=======
->>>>>>> main
 
 if [[ -z "$ACTION" ]]; then
   echo "Usage: $0 <Action> [Username]" >&2
@@ -44,13 +38,10 @@ if [[ -n "$USERNAME" ]]; then
   MESSAGE+=$'\n'
   MESSAGE+="User: ${USERNAME}"
 fi
-<<<<<<< codex/fix-log-file-not-readable-error
 if [[ -n "$LOG_LINE" ]]; then
   MESSAGE+=$'\n'
   MESSAGE+="Log line: ${LOG_LINE}"
 fi
-=======
->>>>>>> main
 
 # Send the message using the local mail command.
 printf '%s\n' "$MESSAGE" | mail -s "$SUBJECT" "$NOTIFY_MAIL_TO"
