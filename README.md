@@ -1,5 +1,5 @@
 # loginNotifier
-A script that reads your auth logs and runs a notifier when somebody logs in.
+A script that checks your journalctl every certain time and run a notifier when matches certains message.
 
 ## Install
 1. Make sure the watcher and notifier scripts are executable:
@@ -11,12 +11,10 @@ A script that reads your auth logs and runs a notifier when somebody logs in.
 
 ## Usage
 ### Show session openings in the terminal
-Run the watcher accepts 3 parameters: action (`opened`),  notification (`terminal`) and checktime (`10`):
+The watcher accepts 3 parameters: action (`opened`),  notification (`terminal`) and optionally, the elapseTime (`10`):
 ```bash
 ./notifier.sh opened terminal 10
 ```
-The last parameter is optional and indicates time in seconds (defaults is 10
-seconds).
 
 ### Run in the background
 Leave it running in the background and log output to a file:
