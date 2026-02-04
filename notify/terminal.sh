@@ -13,35 +13,58 @@
 # =============================================================================
 set -euo pipefail
 
-ACTION="${1:-}"
-USERNAME="${2:-}"
-LOG_LINE="${3:-}"
+TERMINAL_HEADER_TEMPLATE="${NOTIFY_TERMINAL_HEADER_TEMPLATE:-[%s] Action: %s}"
+TERMINAL_USER_TEMPLATE="${NOTIFY_TERMINAL_USER_TEMPLATE:- | User: %s}"
+TERMINAL_LINE_TEMPLATE="${NOTIFY_TERMINAL_LINE_TEMPLATE:- | Line: %s}"
 
-if [[ -z "$ACTION" ]]; then
-  echo "Usage: $0 <Action> [Username]" >&2
-  exit 1
-fi
-
-MESSAGE="[$(hostname)] Action: $ACTION"
-if [[ -n "$USERNAME" ]]; then
-  MESSAGE+=" | User: $USERNAME"
-fi
-if [[ -n "$LOG_LINE" ]]; then
-  MESSAGE+=" | Line: $LOG_LINE"
-fi
-
-ROOT_TTY="${ROOT_TTY_OVERRIDE:-}"
-if [[ -z "$ROOT_TTY" ]]; then
-  ROOT_TTY=$(who | awk '$1=="root" {print $2; exit}')
-  if [[ -n "$ROOT_TTY" ]]; then
-    ROOT_TTY="/dev/${ROOT_TTY}"
+build_message() {
+  local action="$1"
+  local username="${2:-}"
+  local log_line="${3:-}"
+  local message
+  printf -v message "$TERMINAL_HEADER_TEMPLATE" "$(hostname)" "$action"
+  if [[ -n "$username" ]]; then
+    message+=$(printf "$TERMINAL_USER_TEMPLATE" "$username")
   fi
-fi
+  if [[ -n "$log_line" ]]; then
+    message+=$(printf "$TERMINAL_LINE_TEMPLATE" "$log_line")
+  fi
+  printf '%s\n' "$message"
+}
 
-if [[ -z "$ROOT_TTY" || ! -w "$ROOT_TTY" ]]; then
-  echo "No writable root TTY found; skipping terminal notification." >&2
-  exit 0
-fi
+send_notification() {
+  local message="$1"
+  local root_tty="${ROOT_TTY_OVERRIDE:-}"
+  if [[ -z "$root_tty" ]]; then
+    root_tty=$(who | awk '$1=="root" {print $2; exit}')
+    if [[ -n "$root_tty" ]]; then
+      root_tty="/dev/${root_tty}"
+    fi
+  fi
 
-# Send the message directly to the root terminal.
-printf '%s\n' "$MESSAGE" > "$ROOT_TTY"
+  if [[ -z "$root_tty" || ! -w "$root_tty" ]]; then
+    echo "No writable root TTY found; skipping terminal notification." >&2
+    exit 0
+  fi
+
+  printf '%s\n' "$message" > "$root_tty"
+}
+
+main() {
+  local action="${1:-}"
+  local username="${2:-}"
+  local log_line="${3:-}"
+
+  if [[ -z "$action" ]]; then
+    echo "Usage: $0 <Action> [Username]" >&2
+    exit 1
+  fi
+
+  local message
+  message=$(build_message "$action" "$username" "$log_line")
+  send_notification "$message"
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  main "$@"
+fi

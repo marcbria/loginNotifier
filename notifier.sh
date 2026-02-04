@@ -40,6 +40,14 @@ if [[ ! -x "$NOTIFY_SCRIPT" ]]; then
   exit 1
 fi
 
+# Load notifier configuration and message formatter.
+# shellcheck source=/dev/null
+source "$NOTIFY_SCRIPT"
+if ! declare -f build_message >/dev/null 2>&1; then
+  echo "Notify script does not define build_message: $NOTIFY_SCRIPT" >&2
+  exit 1
+fi
+
 is_excluded_user() {
   # Description: Check if a username is in the exclusion list.
   # Parameters:
@@ -67,6 +75,9 @@ process_login_line() {
   if is_excluded_user "$user"; then
     return 0
   fi
+  local message
+  message=$(build_message "$ACTION_MATCH" "$user" "$line")
+  printf '%s\n' "$message"
   "$NOTIFY_SCRIPT" "$ACTION_MATCH" "$user" "$line"
 }
 
