@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Script:    notifyMail.sh
+# Script:    mail.sh
 # Author:    Marc Bria (UAB)
 # License:   AGPL-3.0
 # Purpose:   Send a login/logout notification via email using the local mail command.
